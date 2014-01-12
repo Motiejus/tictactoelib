@@ -26,4 +26,14 @@ T.run = function(filename)
     return pcall(user_function)
 end
 
+T.StringBuffer = function()
+    local ret = {}
+    local bfr_mt = {
+        __concat = function(self, x) table.insert(self, x); return self end,
+        __tostring = function(self) return table.concat(self, "") end
+    }
+    setmetatable(ret, bfr_mt)
+    return ret
+end
+
 return T
