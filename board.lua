@@ -21,7 +21,7 @@ SBoard.new = function()
         {nil, nil, nil},
         {nil, nil, nil}
     }
-    setmetatable(sboard, {__tostring=SBoard.tostring})
+    setmetatable(sboard, {__tostring=SBoard.tostring, __index=SBoard})
     return sboard
 end
 
@@ -50,7 +50,7 @@ Board.new = function()
         {SBoard.new(), SBoard.new(), SBoard.new()},
         {SBoard.new(), SBoard.new(), SBoard.new()}
     }
-    setmetatable(board, {__tostring=Board.tostring})
+    setmetatable(board, {__tostring=Board.tostring, __index=Board})
     return board
 end
 
@@ -76,15 +76,15 @@ SBoard.state = function(self)
         {self[1][1], self[2][2], self[3][3]}, -- \
         {self[1][3], self[2][2], self[3][1]}  -- /
     }
-    for x in 1, 3 do
+    for x = 1, 3 do
         table.insert(choices, {self[x][1], self[x][2], self[x][3]}) -- rows
         table.insert(choices, {self[1][x], self[2][x], self[3][x]}) -- cols
     end
 
     local draw = true
-    for set in choices do
+    for _, set in ipairs(choices) do
         local a, b, c = set[1], set[2], set[3]
-        if a == b and b == c and (b == "x" or b == "o") then
+        if a == b and b == c and b ~= nil then
             return b
         elseif a == nil or b == nil or c == nil then
             draw = false
@@ -97,8 +97,8 @@ end
 -- "draw", "x", "o", nil (continue)
 Board.state = function(self)
     local sboard = SBoard.new()
-    for x in 1, 3 do
-        for y in 1, 3 do
+    for x = 1, 3 do
+        for y = 1, 3 do
             sboard[x][y] = SBoard.state(self[x][y])
         end
     end
