@@ -6,8 +6,6 @@ local play = require("play")
 
 local function run_command_line(arg)
     local p1, p2 = T.run(arg[1]), T.run(arg[2])
-    assert(type(p1) == "function")
-    assert(type(p2) == "function")
 
     for xo, state, place_or_err, board in play(p1, p2) do
         if state == false then

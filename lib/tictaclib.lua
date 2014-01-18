@@ -18,12 +18,22 @@ local env = {
     math=shallow_copy(math), table=shallow_copy(table)
 }
 
+local function get_user_function(filename)
+    if _VERSION:find("5.1$") then
+        local user_function = assert(loadfile(filename))
+        setfenv(user_function, env)
+        return user_function
+    elseif _VERSION:find("5.2$") then
+        return assert(loadfile(filename, nil, 't', env))
+    else
+        error("Lua 5.1 or 5.2 required")
+    end
+end
+
 T.run = function(filename)
-    local user_function, message = loadfile(filename)
-    if not user_function then return nil, message end
-    setfenv(user_function, env)
-    local err, fun = pcall(user_function)
-    assert(err, "bad user function")
+    local user_function = get_user_function(filename)
+    local err, fun = assert(pcall(user_function))
+    assert(err and type(fun) == "function", "bad function")
     return fun
 end
 

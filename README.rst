@@ -18,4 +18,9 @@ something that takes events from UI).
 
 For human-readable game rules, see ultimate-tic-tac-toe's website_.
 
+Compatibility
+-------------
+
+Library is written in pure Lua, is compatible with Lua5.1 and Lua5.2.
+
 .. _website: http://mathwithbaddrawings.com/2013/06/16/ultimate-tic-tac-toe/
