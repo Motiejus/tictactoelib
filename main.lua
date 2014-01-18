@@ -1,6 +1,7 @@
 #!/usr/bin/env lua
 
 package.path = package.path .. ";lib/?.lua"
+
 local T = require("tictaclib")
 local play = require("play")
 
