@@ -1,6 +1,6 @@
 local Board = require("board")
 
-local function validate(board, a1, b1, x1, y1, x2, y2)
+local validate = function(board, a1, b1, x1, y1, x2, y2)
     if a1 ~= nil and not (a1 == x1 and b1 == y1) then
         return false, "incorrect placement"
     end

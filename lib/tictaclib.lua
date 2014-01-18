@@ -1,6 +1,6 @@
 local T = {}
 
-local function shallow_copy(tbl)
+local shallow_copy = function(tbl)
     local new_tbl = {}
     for k, v in pairs(tbl) do
         new_tbl[k] = v
@@ -18,7 +18,7 @@ local env = {
     math=shallow_copy(math), table=shallow_copy(table)
 }
 
-local function get_user_function(filename)
+local get_user_function = function(filename)
     if _VERSION:find("5.1$") then
         local user_function = assert(loadfile(filename))
         setfenv(user_function, env)

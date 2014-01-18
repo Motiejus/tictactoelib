@@ -4,7 +4,7 @@ package.path = package.path .. ";lib/?.lua"
 local T = require("tictaclib")
 local play = require("play")
 
-local function main(f1, f2)
+local main = function(f1, f2)
     local p1, p2 = T.run(f1), T.run(f2)
 
     for xo, state, place_or_err, board in play(p1, p2) do
