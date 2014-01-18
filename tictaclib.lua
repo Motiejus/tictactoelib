@@ -23,7 +23,9 @@ T.run = function(filename)
     local user_function, message = loadfile(filename)
     if not user_function then return nil, message end
     setfenv(user_function, env)
-    return pcall(user_function)
+    local err, fun = pcall(user_function)
+    assert(err, "bad user function")
+    return fun
 end
 
 T.StringBuffer = function()

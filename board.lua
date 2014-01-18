@@ -3,7 +3,6 @@ T = require("tictaclib")
 local Board = {} -- 9x9 board
 local SBoard = {} -- 3x3 board
 
-
 SBoard.tostring = function(self)
     local ret = T.StringBuffer()
     for x = 1, 3 do
@@ -102,7 +101,8 @@ Board.state = function(self)
             sboard[x][y] = SBoard.state(self[x][y])
         end
     end
-    return SBoard.state(sboard)
+    local state = SBoard.state(sboard)
+    return state ~= nil and state or nil
 end
 
 return Board
