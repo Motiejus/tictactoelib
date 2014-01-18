@@ -15,3 +15,7 @@ Command-line example above makes it fight with itself.
 
 See ``examples/player1.lua`` how to implement a player (it could also be
 something that takes events from UI).
+
+For human-readable game rules, see ultimate-tic-tac-toe's website_.
+
+.. _website: http://mathwithbaddrawings.com/2013/06/16/ultimate-tic-tac-toe/
