@@ -1,4 +1,4 @@
-T = require("tictaclib")
+local T = require("tictaclib")
 
 local Board = {} -- 9x9 board
 local SBoard = {} -- 3x3 board
