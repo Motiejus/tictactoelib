@@ -1,5 +1,7 @@
-local T = require("tictaclib")
-local play = require("play")
+#!/usr/bin/lua
+
+local T = require("lib.tictaclib")
+local play = require("lib.play")
 
 local function main()
     local p1, p2 = T.run(arg[1]), T.run(arg[2])
