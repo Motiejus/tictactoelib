@@ -43,18 +43,16 @@ end
 
 
 -- Places a move on a big board
-local function move(xo, board, x1, y1)
-    local x2, y2
-    if x1 ~= nil then
-        x2, y2 = move_small(board[x1][y1])
-        return x1, y1, x2, y2
+local function move(xo, board, row, col)
+    if row ~= nil and col ~= nil then
+        return row, col, move_small(board[row][col])
     else
-        for row = 1, 3 do
-            for col = 1, 3 do
+        for x1 = 1, 3 do
+            for y1 = 1, 3 do
                 -- If there are slots on board[row][col]
                 -- (see above for state method)
-                if board[row][col]:state() == nil then
-                    return row, col, move_small(board[row][col])
+                if board[x1][y1]:state() == nil then
+                    return x1, y1, move_small(board[x1][y1])
                 end
             end
         end
