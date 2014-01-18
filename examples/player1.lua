@@ -51,15 +51,10 @@ local function move(xo, board, x1, y1)
     else
         for row = 1, 3 do
             for col = 1, 3 do
-
                 -- If there are slots on board[row][col]
                 -- (see above for state method)
                 if board[row][col]:state() == nil then
-                    -- loop until empty slot found
-                    while x2 == nil and y2 == nil do
-                        x2, y2 = move_small(board[row][col])
-                    end
-                    return row, col, x2, y2
+                    return row, col, move_small(board[row][col])
                 end
             end
         end
