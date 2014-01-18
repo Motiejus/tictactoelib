@@ -2,7 +2,7 @@ local T = {}
 
 local function shallow_copy(tbl)
     local new_tbl = {}
-    for k, v in pairs(math) do
+    for k, v in pairs(tbl) do
         new_tbl[k] = v
     end
     return new_tbl
