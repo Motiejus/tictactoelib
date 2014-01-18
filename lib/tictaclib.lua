@@ -15,8 +15,7 @@ local env = {
     tonumber=tonumber, pairs=pairs, pcall=pcall, type=type, select=select,
     ipairs=ipairs, _VERSION=_VERSION, error=error,
 
-    math=shallow_copy(math), table=shallow_copy(table),
-    coroutine=shallow_copy(coroutine)
+    math=shallow_copy(math), table=shallow_copy(table)
 }
 
 T.run = function(filename)
