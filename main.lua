@@ -4,8 +4,8 @@ package.path = package.path .. ";lib/?.lua"
 local T = require("tictaclib")
 local play = require("play")
 
-local function run_command_line(arg)
-    local p1, p2 = T.run(arg[1]), T.run(arg[2])
+local function main(f1, f2)
+    local p1, p2 = T.run(f1), T.run(f2)
 
     for xo, state, place_or_err, board in play(p1, p2) do
         if state == false then
@@ -28,8 +28,8 @@ if arg and arg[0]:find("main.lua$") then
         io.stderr:write("Usage: " .. arg[0] .. " player1.lua player2.lua\n")
         os.exit(1)
     else
-        run_command_line(arg)
+        main(arg[1], arg[2])
     end
 else
-    return run_command_line
+    return main
 end
