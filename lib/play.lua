@@ -31,9 +31,14 @@ local play = function(p1, p2)
     local p, xo, a1, b1 = p1, "x", nil, nil
 
     while state == nil do
-        local x1, y1, x2, y2 = p(xo, board:copy(), a1, b1)
+        pp = function() return p(xo, board:copy(), a1, b1) end
+        local success, x1, y1, x2, y2 = pcall(pp)
+        if not success then
+            coroutine.yield(xo, false, x1)
+            return
+        end
 
-        valid, err = validate(board, a1, b1, x1, y1, x2, y2)
+        local valid, err = validate(board, a1, b1, x1, y1, x2, y2)
         if not valid then
             coroutine.yield(xo, false, err)
             return
