@@ -31,7 +31,7 @@ local play = function(p1, p2)
     local p, xo, a1, b1 = p1, "x", nil, nil
 
     while state == nil do
-        pp = function() return p(xo, board:copy(), a1, b1) end
+        local pp = function() return p(xo, board:copy(), a1, b1) end
         local success, x1, y1, x2, y2 = pcall(pp)
         if not success then
             coroutine.yield(xo, false, x1, board)
