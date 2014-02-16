@@ -1,12 +1,11 @@
 #!/usr/bin/env lua
-
 package.path = package.path .. ";lib/?.lua"
 
 local T = require("tictaclib")
 local play = require("play")
 
 local main = function(f1, f2)
-    local p1, p2 = T.run(f1), T.run(f2)
+    local p1, p2 = T.runfile(f1), T.runfile(f2)
 
     for xo, moveresult, log, board in play(p1, p2) do
         if moveresult[1] == "error" then
