@@ -1,5 +1,3 @@
-#!/usr/bin/env lua
-package.path = package.path .. ";lib/?.lua"
 
 local T = require("tictaclib")
 local play = require("play")
@@ -24,13 +22,4 @@ local main = function(f1, f2)
     end
 end
 
-if arg and arg[0]:find("main.lua$") then
-    if #arg ~= 2 then
-        io.stderr:write("Usage: " .. arg[0] .. " player1.lua player2.lua\n")
-        os.exit(1)
-    else
-        main(arg[1], arg[2])
-    end
-else
-    return main
-end
+return main
