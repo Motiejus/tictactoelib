@@ -8,11 +8,12 @@ local play = require("play")
 local main = function(f1, f2)
     local p1, p2 = T.run(f1), T.run(f2)
 
-    for xo, state, place_or_err, board in play(p1, p2) do
-        if state == false then
-            print (xo .. " error: " .. place_or_err)
-        else
-            local places = table.concat(place_or_err, "; ")
+    for xo, moveresult, log, board in play(p1, p2) do
+        if moveresult[1] == "error" then
+            print (xo .. " error: " .. moveresult[2])
+        elseif moveresult[1] == "state_coords" then
+            local places = table.concat(moveresult[2][2], "; ")
+            local state = moveresult[2][1]
             print (xo .. " placed " .. "(" .. places .. ")")
             if state == "draw" then
                 print ("draw")

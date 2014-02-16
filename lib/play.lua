@@ -19,34 +19,40 @@ local validate = function(board, a1, b1, x1, y1, x2, y2)
 end
 
 -- Yields:
---   xo; state; {x1, y1, x2, y2} | errorstring; board
---   state:
---      * false (error)
---      * nil (continue)
+--   xo; moveresult; log; board
+--   moveresult ::
+--      * {"state_coords", state_coords}
+--      * {"error", error_string}
+--   state_coords ::
+--      {state, {x1, y1, x2, y2}}
+--   state ::
 --      * "x" ("x" won)
 --      * "o" ("o" won)
 --      * "draw"
+--      * nil (continue)
 local play = function(p1, p2)
     local board, state = Board.new(), nil
     local p, xo, a1, b1 = p1, "x", nil, nil
 
     while state == nil do
         local pp = function() return p(xo, board:copy(), a1, b1) end
-        local success, x1, y1, x2, y2 = pcall(pp)
+        local success, x1_or_err, y1, x2, y2 = pcall(pp)
         if not success then
-            coroutine.yield(xo, false, x1, board)
+            coroutine.yield(xo, {"error", x1_or_err}, "", board)
             return
         end
+        local x1 = x1_or_err
 
         local valid, err = validate(board, a1, b1, x1, y1, x2, y2)
         if not valid then
-            coroutine.yield(xo, false, err, board)
+            coroutine.yield(xo, {"error", err}, "", board)
             return
         end
 
         board[x1][y1][x2][y2] = xo
         state = board:state()
-        coroutine.yield(xo, state, {x1, y1, x2, y2}, board)
+        state_coords = {"state_coords", {state, {x1, y1, x2, y2}}}
+        coroutine.yield(xo, state_coords, "", board)
         p = p == p1 and p2 or p1
         xo = xo == "x" and "o" or "x"
         if board[x2][y2]:state() == nil then
