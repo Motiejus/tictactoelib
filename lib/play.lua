@@ -29,7 +29,7 @@ end
 --      * "x" ("x" won)
 --      * "o" ("o" won)
 --      * "draw"
---      * nil (continue)
+--      * "continue"
 local play = function(p1, p2)
     local board, state = Board.new(), nil
     local p, xo, a1, b1 = p1, "x", nil, nil
@@ -51,7 +51,8 @@ local play = function(p1, p2)
 
         board[x1][y1][x2][y2] = xo
         state = board:state()
-        state_coords = {"state_coords", {state, {x1, y1, x2, y2}}}
+        state_ret = state == nil and "continue" or state
+        state_coords = {"state_coords", {state_ret, {x1, y1, x2, y2}}}
         coroutine.yield(xo, state_coords, "", board)
         p = p == p1 and p2 or p1
         xo = xo == "x" and "o" or "x"
