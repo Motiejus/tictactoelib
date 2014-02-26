@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-from __future__ import print_function
-
 import sys
 import msgpack
 import subprocess
@@ -36,24 +34,24 @@ def main(f1, f2):
     )
     send_payload(f.stdin, msg)
 
-    while True:
+    xo, stop = 'x', False
+    while not stop:
         msg = get_payload(f.stdout)
         if msg == b'':
-            return
-        [xo, moveresult, log] = msgpack.unpackb(msg)
-        xo, log = xo.decode('utf8'), log.decode('utf8')
-        #print (xo, moveresult, log)
-
-        if moveresult[0] == b'error':
-            print ("%s error: %s" % (xo, moveresult[1].decode('utf8')))
-        elif moveresult[0] == b'state_coords':
-            places = [str(p) for p in moveresult[1][1]]
-            state = moveresult[1][0].decode('utf8')
-            print ("%s placed (%s)" % (xo, "; ".join(places)))
-            if state == 'draw':
-                print ("draw")
-            elif state == 'x' or state == 'o':
-                print ("%s won" % state)
+            print ("Terminated unexpectedly during %s" % xo)
+            stop = True
+        else:
+            [xo, moveresult, log] = msgpack.unpackb(msg)
+            xo, log = xo.decode('utf8'), log.decode('utf8')
+            if moveresult[0] == b'error':
+                print ("%s error: %s" % (xo, moveresult[1].decode('utf8')))
+            elif moveresult[0] == b'state_coords':
+                places = [str(p) for p in moveresult[1][1]]
+                state = moveresult[1][0].decode('utf8')
+                print ("%s placed (%s)" % (xo, "; ".join(places)))
+                if state == 'draw' or state == 'x' or state == 'o':
+                    print ("%s won" % state)
+                    stop = True
 
 
 if __name__ == '__main__':
