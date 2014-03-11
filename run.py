@@ -24,7 +24,13 @@ def get_payload(fh):
     return fh.read(length)
 
 
-def main(f1, f2):
+def main():
+    if len(sys.argv) != 3:
+        err = "Usage: %s player1.lua player2.lua\n" % sys.argv[0]
+        print (err, file=sys.stderr)
+        sys.exit(1)
+
+    f1, f2 = sys.argv[1], sys.argv[2]
     source_x, source_o = get_source(f1), get_source(f2)
     msg = msgpack.packb([source_x, source_o])
     f = subprocess.Popen(['./run.lua', '--server'],
@@ -55,9 +61,4 @@ def main(f1, f2):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 3:
-        err = "Usage: %s player1.lua player2.lua\n" % sys.argv[0]
-        print (err, file=sys.stderr)
-        sys.exit(1)
-    else:
-        main(sys.argv[1], sys.argv[2])
+    main()
