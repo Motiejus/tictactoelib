@@ -2,7 +2,8 @@ from os.path import join, dirname
 from pip.req import parse_requirements
 from setuptools import setup, find_packages
 
-install_reqs = list(parse_requirements("requirements.txt"))
+reqs_file = join(dirname(__file__), "requirements.txt")
+install_reqs = list(parse_requirements(reqs_file))
 
 setup(
     name='tictactoelib',
@@ -24,12 +25,12 @@ setup(
         'Programming Language :: Lua',
         'Topic :: Games/Entertainment :: Board Games',
     ],
-    packages=find_packages('.'),
+    packages=['tictactoelib'],
     install_requires=[str(ir.req) for ir in install_reqs],
     include_package_data=True,
     entry_points={
         'console_scripts': [
-            'tictactoelib = run:main'
+            'tictactoelib = tictactoelib.run:main'
         ]
     },
 )
