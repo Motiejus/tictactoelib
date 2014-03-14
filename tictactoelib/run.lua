@@ -1,4 +1,6 @@
 #!/usr/bin/env lua
+extra_path = (arg[0]:sub(0, arg[0]:len() - string.len("run.lua")))
+package.path = package.path .. ";" .. extra_path .. "?.lua"
 
 local main_server = function(...)
     require("ui_server")(...)

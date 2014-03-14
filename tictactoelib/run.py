@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import os
 import sys
 import msgpack
 import subprocess
@@ -33,7 +34,8 @@ def main():
     f1, f2 = sys.argv[1], sys.argv[2]
     source_x, source_o = get_source(f1), get_source(f2)
     msg = msgpack.packb([source_x, source_o])
-    f = subprocess.Popen(['./run.lua', '--server'],
+    run_lua = os.path.join(os.path.dirname(__file__), 'run.lua')
+    f = subprocess.Popen([run_lua, '--server'],
                          bufsize=0xffff,
                          stdin=subprocess.PIPE,
                          stdout=subprocess.PIPE
