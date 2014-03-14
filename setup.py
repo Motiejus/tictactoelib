@@ -26,6 +26,9 @@ setup(
         'Topic :: Games/Entertainment :: Board Games',
     ],
     packages=['tictactoelib'],
+    package_data = {
+        'tictactoelib': ['*.lua'],
+    },
     zip_safe=False,
     install_requires=[str(ir.req) for ir in install_reqs],
     include_package_data=True,
