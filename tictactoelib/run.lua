@@ -1,5 +1,4 @@
 #!/usr/bin/env lua
-package.path = package.path .. ";tictactoelib/?.lua"
 
 local main_server = function(...)
     require("ui_server")(...)
