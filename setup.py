@@ -25,12 +25,12 @@ setup(
         'Programming Language :: Lua',
         'Topic :: Games/Entertainment :: Board Games',
     ],
-    packages=find_packages(),
+    packages=['tictactoelib'],
     install_requires=[str(ir.req) for ir in install_reqs],
     include_package_data=True,
     entry_points={
         'console_scripts': [
-            'tictactoelib = run:main'
+            'tictactoelib = tictactoelib.run:main'
         ]
     },
 )

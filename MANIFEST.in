@@ -1,4 +1,3 @@
 include run.lua
-include run.py
 include examples/*.lua
-include lib/*.lua
+include tictactoelib/*.lua
