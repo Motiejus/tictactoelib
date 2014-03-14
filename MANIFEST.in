@@ -1,3 +1,2 @@
-include run.lua
 include examples/*.lua
 include tictactoelib/*.lua
