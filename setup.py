@@ -22,7 +22,7 @@ setup(
         'License :: OSI Approved :: Apache Software License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
-        'Programming Language :: Lua',
+        'Programming Language :: Other Scripting Engines',
         'Topic :: Games/Entertainment :: Board Games',
     ],
     packages=['tictactoelib'],
