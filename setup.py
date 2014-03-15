@@ -7,7 +7,7 @@ install_reqs = list(parse_requirements(reqs_file))
 
 setup(
     name='tictactoelib',
-    version='0.0.2a3',
+    version='0.0.3',
     author="Motiejus Jakštys",
     author_email='desired.mta@gmail.com',
     description="Ultimate Tic Tac Toe game logic (Lua and Python bindings)",
@@ -15,7 +15,7 @@ setup(
     url="http://github.com/Motiejus/ultimate-tic-tac-toe",
     license='Apache2',
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
         'Intended Audience :: Education',
         'Natural Language :: English',
