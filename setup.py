@@ -7,7 +7,7 @@ install_reqs = list(parse_requirements(reqs_file))
 
 setup(
     name='tictactoelib',
-    version='0.0.4a3',
+    version='0.0.4a4',
     author="Motiejus Jakštys",
     author_email='desired.mta@gmail.com',
     description="Ultimate Tic Tac Toe game logic (Lua and Python bindings)",
@@ -25,9 +25,10 @@ setup(
         'Programming Language :: Other Scripting Engines',
         'Topic :: Games/Entertainment :: Board Games',
     ],
-    packages=['tictactoelib'],
+    packages=['tictactoelib', 'tictactoelib.examples'],
     package_data ={
-        'tictactoelib': ['*.lua']
+        'tictactoelib': ['*.lua'],
+        'tictactoelib.examples': ['*.lua'],
     },
     zip_safe=False,
     install_requires=[str(ir.req) for ir in install_reqs],
