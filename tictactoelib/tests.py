@@ -20,12 +20,14 @@ class NonInteractive(unittest.TestCase):
         self.assertNotEqual(0, gameplay[-1])
 
     def test_error_x(self):
-        error, reason, gameplay = compete(err_syntax, player1)
+        error, guilty, reason, gameplay = compete(err_syntax, player1)
         self.assertEqual('error', error)
+        self.assertEqual('x', guilty)
         self.assertRegex(reason, '^\[string.*')
         self.assertEqual([0], gameplay)
 
     def test_error_o(self):
-        error, reason, gameplay = compete(player1, err_syntax)
+        error, guilty, reason, gameplay = compete(player1, err_syntax)
         self.assertEqual('error', error)
+        self.assertEqual('o', guilty)
         self.assertEqual([1, 0], gameplay)

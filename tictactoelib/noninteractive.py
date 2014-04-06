@@ -4,14 +4,15 @@ def compete(source_x, source_o):
     """Fights two source files.
 
     Returns either:
-    * ('ok', 'x' | 'draw' | 'o', gameplay)
-    * ('error', ERROR_STRING, GAMEPLAY)
+    * ('ok', 'x' | 'draw' | 'o', GAMEPLAY)
+    * ('error', GUILTY, REASON, GAMEPLAY)
 
-    ERROR_STRING := utf8-encoded string (up to 40k chars)
+    REASON := utf8-encoded error string (can be up to 65k chars)
     GAMEPLAY := [ NUM ]
+    GUILTY := 'x' | 'o' (during whose turn the error occured)
     NUM := 1..81 | 0
 
-    NUM=1 means the move resulted in error (then ERROR_STRING is non-empty)
+    NUM=0 means the move resulted in error (then ERROR_STRING is non-empty)
     GAMEPLAY is never more than 255 characters long:
       len(",".join(map(str, range(1, 81)))) == 230
     """
@@ -19,7 +20,7 @@ def compete(source_x, source_o):
     gameplay = []
     for xo, moveresult, log in run_interactive(source_x, source_o):
         if moveresult[0] == 'error':
-            return 'error', moveresult[1], gameplay + [0]
+            return 'error', xo, moveresult[1], gameplay + [0]
         elif moveresult[0] == 'state_coords':
             gameplay.append(coords_to_num(moveresult[1][1]))
             state = moveresult[1][0]
