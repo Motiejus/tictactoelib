@@ -14,10 +14,20 @@ test2() {
 }
 
 test3() {
+    # Install to virtualenv and run from cmdline
     python3 ./setup.py install
     tictactoelib $P1 $P1 | grep 'o won'
+}
+
+test4() {
+    # Install tictactoelib from pip and run from cmdline
+    virtualenv -ppython3 env
+    VSN=`awk -F\' '/^\s+version/{print $2}' setup.py`
+    ./env/bin/pip install tictactoelib==$VSN
+    ./env/bin/tictactoelib $P1 $P1 | grep 'o won'
 }
 
 test1
 test2
 test3
+test4
