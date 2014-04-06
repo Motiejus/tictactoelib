@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+"""This file mimics run.lua in interactive mode"""
+
 
 import sys
 
