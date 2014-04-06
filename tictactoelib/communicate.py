@@ -20,10 +20,14 @@ def get_payload(fh):
 
 def run_interactive(source_x, source_o):
     msg = msgpack.packb([source_x, source_o])
+    lua_ex = os.getenv("LUA")
     run_lua = os.path.join(os.path.dirname(__file__), 'run.lua')
-    with subprocess.Popen([run_lua, '--server'], bufsize=0xffff,
-                          stdin=subprocess.PIPE, stdout=subprocess.PIPE) as f:
-
+    if lua_ex:
+        server = [lua_ex, run_lua, '--server']
+    else:
+        server = [run_lua, '--server']
+    args = dict(bufsize=0xffff, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+    with subprocess.Popen(server, **args) as f:
         send_payload(f.stdin, msg)
         xo, stop = 'x', False
         while not stop:
