@@ -3,7 +3,7 @@
 set -ex
 
 LUA=${LUA=lua}
-P1=tictactoelib/examples/player1.lua 
+P1=tictactoelib/examples/dumb_player.lua 
 
 test1() {
     $LUA tictactoelib/run.lua $P1 $P1 | grep 'o won'
