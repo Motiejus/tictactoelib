@@ -1,4 +1,3 @@
-
 local T = require("tictaclib")
 local play = require("play")
 

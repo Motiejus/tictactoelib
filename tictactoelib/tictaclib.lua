@@ -9,8 +9,6 @@ local shallow_copy = function(tbl)
 end
 
 local env = {
-    print=print, -- disable on prod
-
     tostring=tostring, unpack=unpack, next=next, assert=assert,
     tonumber=tonumber, pairs=pairs, pcall=pcall, type=type, select=select,
     ipairs=ipairs, _VERSION=_VERSION, error=error,
@@ -42,14 +40,28 @@ local get_user_function_string = function(string)
     end
 end
 
-local function run(user_function)
-    local err, fun = assert(pcall(user_function))
-    assert(err and type(fun) == "function", "bad function")
-    return fun
+local function saferun(loader, arg)
+    -- returns lambda, user's function caller.
+    --
+    -- first call returns a lambda, the user's function.
+    -- result intended to be called with pcall.
+    local user_fun = nil
+    local maybe_load_fun_and_call = function(...)
+        if not user_fun then
+            user_fun = loader(arg)
+        end
+        return user_fun()(...)
+    end
+    return maybe_load_fun_and_call
 end
 
-T.runfile = function(filename) return run(get_user_function_file(filename)) end
-T.runstring = function(string) return run(get_user_function_string(string)) end
+T.runfile = function(filename)
+    return saferun(get_user_function_file, filename)
+end
+
+T.runstring = function(string)
+    return saferun(get_user_function_string, string)
+end
 
 T.StringBuffer = function()
     local ret = {}

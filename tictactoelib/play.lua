@@ -6,7 +6,7 @@ local validate = function(board, a1, b1, x1, y1, x2, y2)
     end
     for _, i in ipairs({x1, y1, x2, y2}) do
         if type(i) ~= "number" then
-            return false, "number expected"
+            return false, "number expected, got " .. type(i)
         end
         if not (i >= 1 and i <= 3) then
             return false, "number out of bounds"
