@@ -40,15 +40,15 @@ local get_user_function_string = function(string)
     end
 end
 
-local function saferun(loader, arg)
+local function saferun(loader, loader_arg)
     -- returns lambda, user's function caller.
     --
     -- first call returns a lambda, the user's function.
     -- result intended to be called with pcall.
     local user_fun = nil
     local maybe_load_fun_and_call = function(...)
-        if not user_fun then
-            user_fun = loader(arg)
+        if user_fun == nil then
+            user_fun = loader(loader_arg)
         end
         return user_fun()(...)
     end
