@@ -1,10 +1,5 @@
 from .communicate import run_interactive
 
-
-def get_source(filename):
-    return open(filename, "r").read()
-
-
 def compete(source_x, source_o):
     """Fights two source files.
 
@@ -21,25 +16,15 @@ def compete(source_x, source_o):
       len(",".join(map(str, range(1, 81)))) == 230
     """
 
-def main():
-    if len(sys.argv) != 3:
-        err = "Usage: %s player1.lua player2.lua\n" % sys.argv[0]
-        print (err, file=sys.stderr)
-        sys.exit(1)
-
-    source_x, source_o = get_source(sys.argv[1]), get_source(sys.argv[2])
-
     gameplay = []
     for xo, moveresult, log in run_interactive(source_x, source_o):
         if moveresult[0] == 'error':
-            return 'error', moveresult[1][1], gameplay
+            return 'error', moveresult[1], gameplay + [0]
         elif moveresult[0] == 'state_coords':
             gameplay.append(coords_to_num(moveresult[1][1]))
-            places = [str(p) for p in moveresult[1][1]]
             state = moveresult[1][0]
-            print ("%s placed (%s)" % (xo, "; ".join(places)))
             if state == 'draw' or state == 'x' or state == 'o':
-                print ("%s won" % state)
+                return 'ok', state, gameplay
 
 
 def coords_to_num(coords):
