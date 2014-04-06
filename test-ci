@@ -20,10 +20,10 @@ test3() {
 }
 
 test4() {
-    # Install tictactoelib from pip and run from cmdline
+    # Install tictactoelib from pypi and test from cmdline
+    VSN="`pip freeze | grep tictactoelib`"
     virtualenv -ppython3 env
-    VSN=`awk -F\' '/^\s+version/{print $2}' setup.py`
-    ./env/bin/pip install tictactoelib==$VSN
+    ./env/bin/pip install $VSN
     ./env/bin/tictactoelib $P1 $P1 | grep 'o won'
 }
 
