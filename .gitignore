@@ -2,3 +2,4 @@ tictactoelib.egg-info/
 /build/
 /dist/
 /env/
+__pycache__
