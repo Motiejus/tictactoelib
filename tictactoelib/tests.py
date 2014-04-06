@@ -17,6 +17,7 @@ class NonInteractive(unittest.TestCase):
         self.assertEqual('ok', ok)
         self.assertEqual('o', state)
         self.assertEqual([1, 2, 4, 3], gameplay[:4])
+        self.assertNotEqual(0, gameplay[-1])
 
     def test_error_x(self):
         error, reason, gameplay = compete(err_syntax, player1)
