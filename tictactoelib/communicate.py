@@ -2,6 +2,8 @@ import os
 import msgpack
 import subprocess
 
+from .isolate import limit_ram
+
 
 def send_payload(fh, payload):
     length = len(payload)
@@ -18,7 +20,15 @@ def get_payload(fh):
     return fh.read(length)
 
 
-def run_interactive(source_x, source_o):
+def run_interactive(
+        source_x, source_o, timeout=None, memlimit=None,
+        cgroup="tictactoe", cgroup_path="/sys/fs/cgroup"):
+    """Challenges source_x vs source_y under time/memory constraints
+
+    memlimit = memory limit in bytes (for Lua interpreter and everything under)
+    cgroup = existing cgroup where to put this contest
+    """
+
     msg = msgpack.packb([source_x, source_o])
     lua_ex = os.getenv("LUA")
     run_lua = os.path.join(os.path.dirname(__file__), 'run.lua')
@@ -27,23 +37,37 @@ def run_interactive(source_x, source_o):
     else:
         server = [run_lua, '--server']
     args = dict(bufsize=0xffff, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-    with subprocess.Popen(server, **args) as f:
-        send_payload(f.stdin, msg)
-        xo, stop = 'x', False
-        while not stop:
-            msg = get_payload(f.stdout)
-            if msg == b'':
-                yield xo, ('error', "Terminated unexpectedly"), ""
-                stop = True
-            else:
-                [xo, moveresult, log] = msgpack.unpackb(msg)
-                xo, log = xo.decode('utf8'), log.decode('utf8')
-                if moveresult[0] == b'error':
-                    yield xo, ('error', moveresult[1].decode('utf8')), ""
+
+    if timeout is not None:
+        server = ['timeout', '%.3f' % timeout] + server
+
+    with limit_ram(memlimit, cgroup, cgroup_path) as cg:
+        if cg is not None:
+            server = ['cgexec', '-g', cg] + server
+
+        with subprocess.Popen(server, **args) as f:
+            send_payload(f.stdin, msg)
+            xo, stop = 'x', False
+            while not stop:
+                msg = get_payload(f.stdout)
+                if msg == b'':
+                    retcode = f.returncode
+                    if retcode == 124:
+                        yield xo, ('error', "timeout"), ""
+                    elif retcode == -11:
+                        yield xo, ('error', "memory exhausted"), ""
+                    else:
+                        yield xo, ('error', 'unknown error: %d' % retcode), ""
                     stop = True
-                elif moveresult[0] == b'state_coords':
-                    state = moveresult[1][0].decode('utf8')
-                    coords = moveresult[1][1]
-                    if state == 'draw' or state == 'x' or state == 'o':
+                else:
+                    [xo, moveresult, log] = msgpack.unpackb(msg)
+                    xo, log = xo.decode('utf8'), log.decode('utf8')
+                    if moveresult[0] == b'error':
+                        yield xo, ('error', moveresult[1].decode('utf8')), ""
                         stop = True
-                    yield xo, ['state_coords', [state, coords]], ""
+                    elif moveresult[0] == b'state_coords':
+                        state = moveresult[1][0].decode('utf8')
+                        coords = moveresult[1][1]
+                        if state == 'draw' or state == 'x' or state == 'o':
+                            stop = True
+                        yield xo, ['state_coords', [state, coords]], ""
