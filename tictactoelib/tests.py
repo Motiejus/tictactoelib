@@ -3,7 +3,10 @@ import doctest
 
 from . import noninteractive, compete, get_source
 
-from .examples import dumb_player, err_divzero, err_syntax, err_badfun, err_oom
+from .examples import (
+    dumb_player, err_divzero, err_syntax, err_badfun, err_oom, err_timeout
+)
+
 
 
 def load_tests(loader, tests, ignore):
@@ -51,6 +54,12 @@ class NonInteractive(unittest.TestCase):
         r = self._assert_error_o(*compete_res)
         self.assertIn("probably OOM", r)
 
+    def test_error_timeout(self):
+        compete_res = compete(dumb_player, err_timeout, timeout=0.05)
+        r = self._assert_error_o(*compete_res)
+        self.assertIn("timeout", r)
+
+
     def test_mem_x_ok(self):
         twomegs = 1 << 21  # 2M
         self.ok(dumb_player, dumb_player, memlimit=twomegs)
@@ -61,3 +70,4 @@ class NonInteractive(unittest.TestCase):
         self.assertEqual('o', state)
         self.assertEqual([1, 2, 4, 3], gameplay[:4])
         self.assertNotEqual(0, gameplay[-1])
+
