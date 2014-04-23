@@ -28,6 +28,7 @@ setup(
     packages=['tictactoelib', 'tictactoelib.examples'],
     package_data ={
         'tictactoelib': ['*.lua'],
+        'tictactoelib.isolate': ['*.lua'],
         'tictactoelib.examples': ['*.lua'],
     },
     zip_safe=False,
