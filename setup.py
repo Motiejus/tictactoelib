@@ -25,10 +25,9 @@ setup(
         'Programming Language :: Other Scripting Engines',
         'Topic :: Games/Entertainment :: Board Games',
     ],
-    packages=['tictactoelib', 'tictactoelib.examples'],
+    packages=find_packages(),
     package_data ={
         'tictactoelib': ['*.lua'],
-        'tictactoelib.isolate': ['*.lua'],
         'tictactoelib.examples': ['*.lua'],
     },
     zip_safe=False,
