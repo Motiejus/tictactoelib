@@ -1,10 +1,11 @@
 import os
 import subprocess
-from unittest import TestCase
+from unittest import TestCase, skipUnless
 
 from . import limit_ram
 
 
+@skipUnless(os.path.isdir('/sys/fs/cgroup/memory/tictactoe'), 'no cgroups')
 class CGroupTestCase(TestCase):
     def test_oom(self):
         """1024 bytes is not enough to initialize /bin/sh"""
