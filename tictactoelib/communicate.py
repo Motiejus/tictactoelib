@@ -20,9 +20,13 @@ def get_payload(fh):
     return fh.read(length)
 
 
+def flip(xo):
+    return xo == 'x' and 'o' or 'x'
+
+
 def run_interactive(
-        source_x, source_o, timeout=None, memlimit=None,
-        cgroup="tictactoe", cgroup_path="/sys/fs/cgroup"):
+        source_x, source_o, timeout=None, memlimit=None, cgroup=None,
+        cgroup_path=None):
     """Challenges source_x vs source_y under time/memory constraints
 
     memlimit = memory limit in bytes (for Lua interpreter and everything under)
@@ -51,13 +55,13 @@ def run_interactive(
             while not stop:
                 msg = get_payload(f.stdout)
                 if msg == b'':
-                    retcode = f.returncode
-                    if retcode == 124:
+                    xo = flip(xo)  # because bad thing happened during next exec
+                    f.wait()  # it has to shutdown properly first
+                    if f.returncode == 124:
                         yield xo, ('error', "timeout"), ""
-                    elif retcode == -11:
-                        yield xo, ('error', "memory exhausted"), ""
                     else:
-                        yield xo, ('error', 'unknown error: %d' % retcode), ""
+                        errmsg = "probably OOM (%d)" % f.returncode
+                        yield xo, ('error', errmsg), ""
                     stop = True
                 else:
                     [xo, moveresult, log] = msgpack.unpackb(msg)

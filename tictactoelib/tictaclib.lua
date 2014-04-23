@@ -13,7 +13,8 @@ local env = {
     tonumber=tonumber, pairs=pairs, pcall=pcall, type=type, select=select,
     ipairs=ipairs, _VERSION=_VERSION, error=error,
 
-    math=shallow_copy(math), table=shallow_copy(table)
+    math=shallow_copy(math), table=shallow_copy(table),
+    string=shallow_copy(string)
 }
 
 local get_user_function_file = function(filename)

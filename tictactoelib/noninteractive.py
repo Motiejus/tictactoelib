@@ -1,6 +1,7 @@
 from .communicate import run_interactive
 
-def compete(source_x, source_o):
+def compete(source_x, source_o, timeout=None, memlimit=None, cgroup='tictactoe',
+            cgroup_path='/sys/fs/cgroup'):
     """Fights two source files.
 
     Returns either:
@@ -18,7 +19,8 @@ def compete(source_x, source_o):
     """
 
     gameplay = []
-    for xo, moveresult, log in run_interactive(source_x, source_o):
+    for xo, moveresult, log in run_interactive(source_x, source_o, timeout,
+                                               memlimit, cgroup, cgroup_path):
         if moveresult[0] == 'error':
             return 'error', xo, moveresult[1], gameplay + [0]
         elif moveresult[0] == 'state_coords':
