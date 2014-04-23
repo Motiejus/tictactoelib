@@ -36,7 +36,9 @@ local play = function(p1, p2)
 
     while state == nil do
         local pp = function() return p(xo, board:copy(), a1, b1) end
+        collectgarbage()
         local success, x1_or_err, y1, x2, y2 = pcall(pp)
+        collectgarbage()
         if not success then
             coroutine.yield(xo, {"error", x1_or_err}, "", board)
             return
