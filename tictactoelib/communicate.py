@@ -34,12 +34,8 @@ def run_interactive(
     """
 
     msg = msgpack.packb([source_x, source_o])
-    lua_ex = os.getenv("LUA")
     run_lua = os.path.join(os.path.dirname(__file__), 'run.lua')
-    if lua_ex:
-        server = [lua_ex, run_lua, '--server']
-    else:
-        server = [run_lua, '--server']
+    server = [os.getenv("LUA", "lua"), run_lua, '--server']
     args = dict(bufsize=0xffff, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
 
     if timeout is not None:
