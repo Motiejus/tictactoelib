@@ -5,7 +5,8 @@ from unittest import TestCase, skipUnless
 from . import noninteractive, compete, get_source
 
 from .examples import (
-    dumb_player, err_divzero, err_syntax, err_badfun, err_oom, err_timeout
+    dumb_player, err_divzero, err_syntax, err_badfun, err_oom, err_timeout,
+    err_nothing
 )
 
 
@@ -35,6 +36,11 @@ class NonInteractive(TestCase):
         compete_res = compete(dumb_player, err_timeout, timeout=0.05)
         r = assert_error_o(self, *compete_res)
         self.assertIn("timeout", r)
+
+    def test_error_nothing_x(self):
+        compete_res = compete(err_nothing, dumb_player)
+        self.assertIn("got nil", assert_error_x(self, *compete_res))
+
 
 
 SKIPMSG = 'no tictactoe cgroup'

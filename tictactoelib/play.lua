@@ -4,6 +4,11 @@ local validate = function(board, a1, b1, x1, y1, x2, y2)
     if a1 ~= nil and not (a1 == x1 and b1 == y1) then
         return false, "incorrect placement"
     end
+
+    if x1 == nil or y1 == nil or x2 == nil or y2 == nil then
+        return false, "4 numbers expected, got nil"
+    end
+
     for _, i in ipairs({x1, y1, x2, y2}) do
         if type(i) ~= "number" then
             return false, "number expected, got " .. type(i)
