@@ -47,7 +47,7 @@ def run_interactive(
 
         with subprocess.Popen(server, **args) as f:
             send_payload(f.stdin, msg)
-            xo, stop = 'x', False
+            xo, stop = 'o', False
             while not stop:
                 msg = get_payload(f.stdout)
                 if msg == b'':

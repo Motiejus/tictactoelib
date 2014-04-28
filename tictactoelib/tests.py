@@ -37,11 +37,18 @@ class NonInteractive(TestCase):
         self.assertIn("timeout", r)
 
 
-@skipUnless(os.path.isdir('/sys/fs/cgroup/memory/tictactoe'), 'no cgroups')
+SKIPMSG = 'no tictactoe cgroup'
+@skipUnless(os.path.isdir('/sys/fs/cgroup/memory/tictactoe'), SKIPMSG)
 class MemoryTestCase(TestCase):
-    def test_error_oom(self):
-        onek = 1 << 20  # 1M
-        compete_res = compete(dumb_player, err_oom, memlimit=onek)
+    def test_error_oom_x(self):
+        onem = 1 << 20  # 1M
+        compete_res = compete(err_oom, dumb_player, memlimit=onem)
+        r = assert_error_x(self, *compete_res)
+        self.assertIn("probably OOM", r)
+
+    def test_error_oom_o(self):
+        onem = 1 << 20  # 1M
+        compete_res = compete(dumb_player, err_oom, memlimit=onem)
         r = assert_error_o(self, *compete_res)
         self.assertIn("probably OOM", r)
 
@@ -68,8 +75,6 @@ def assert_error_o(self, error, guilty, reason, gameplay):
     self.assertEqual([1, 0], gameplay)
     return reason
 
-
 def load_tests(loader, tests, ignore):
     tests.addTests(doctest.DocTestSuite(noninteractive))
     return tests
-
